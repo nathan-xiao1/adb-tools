@@ -1,7 +1,4 @@
 #!/bin/bash
-source modules/common/adb-utils.sh
-source modules/common/ansi-escape-codes.sh
-source modules/common/message-helpers.sh
 
 # Installs an APK file to connected ADB devices
 _install_apk() {
@@ -29,7 +26,7 @@ _install_apk() {
     done
 
     # Get the list of connected devices
-    local adb_devices=($(adb devices | grep -v "List of devices" | cut -f1))
+    local adb_devices=($(_get_adb_devices))
     if [[ -z "${adb_devices[*]}" ]]; then
         error_msg "No devices found."
         return 1
@@ -67,7 +64,7 @@ _install_apk() {
     pids=()
 
     # Setup trap to catch Ctrl+C (SIGINT) to kill all child processes
-    trap "echo '\n${FG_YELLOW}Cancelling child jobs...${RESET}' >&2 && kill 0" INT
+    trap 'echo -e "\n${FG_YELLOW}Cancelling child jobs...${RESET}" >&2 && kill 0' INT
 
     # Iterate through each device to install on and install the apk
     for device in "${devices[@]}"; do
@@ -147,8 +144,8 @@ _install_apk_single() {
 _launch_apk() {
     local device=$1
     local apk_path="${2:-app/build/outputs/apk/tiktokI18n/debug/app-tiktok-i18n-debug.apk}"
-    local packageName=$(aapt_dump "$apk_path" 'package')
-    local launchActivity=$(get_launcher_activity "$apk_path")
+    local packageName=$(_aapt_dump "$apk_path" 'package')
+    local launchActivity=$(_get_launcher_activity "$apk_path")
 
     if [ -n "$packageName" ] && [ -n "$launchActivity" ]; then
         if [ -n "$device" ]; then

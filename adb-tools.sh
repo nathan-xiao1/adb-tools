@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source modules/common/adb-utils.sh
 source modules/common/ansi-escape-codes.sh
 source modules/common/message-helpers.sh
 

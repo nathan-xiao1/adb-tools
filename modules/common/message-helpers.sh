@@ -15,3 +15,5 @@ warning_msg() {
 device_printf() {
     printf "${FG_DIM}%-18s${RESET} %b\n" "$1" "$2"
 }
+
+export -f success_msg error_msg warning_msg device_printf

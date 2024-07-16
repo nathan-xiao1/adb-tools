@@ -1,6 +1,6 @@
 #!/bin/bash
 
-find_sdk_path() {
+_find_sdk_path() {
     curDir=$(pwd)
     if [ -f "$curDir/local.properties" ]; then
         sdkDir=$(awk '/^sdk.dir/ {print $1}' local.properties | cut -d '=' -f2)
@@ -16,7 +16,7 @@ find_sdk_path() {
     echo "$sdkDir"
 }
 
-aapt_dump() {
+_aapt_dump() {
     apkPath=$1
     key=$2
     aapt_command=$(aapt_command)
@@ -24,7 +24,7 @@ aapt_dump() {
     echo "$result"
 }
 
-aapt_command() {
+_aapt_command() {
     aapt_command=$(which aapt)
     if [ $? != 0 ]; then
         aapt_command=$(set_aapt_path)
@@ -32,7 +32,7 @@ aapt_command() {
     echo "$aapt_command"
 }
 
-set_aapt_path() {
+_set_aapt_path() {
     sdkDir=$(find_sdk_path)
     buildToolsPath="$sdkDir/build-tools"
     for file in $(ls -r $buildToolsPath); do
@@ -44,7 +44,7 @@ set_aapt_path() {
     done
 }
 
-get_launcher_activity() {
+_get_launcher_activity() {
     local apkPath=$1
     aapt_command=$(aapt_command)
     manifestData=$(${aapt_command} dump xmltree "$apkPath" AndroidManifest.xml)
@@ -78,3 +78,11 @@ get_launcher_activity() {
     fi
     echo "$launcherActivity"
 }
+
+_get_adb_devices() {
+    local devices
+    while IFS='' read -r line; do devices+=("$line"); done < <(adb devices | grep -v "List of devices" | cut -f1)
+    echo "${devices[@]}"
+}
+
+export -f _aapt_dump _get_launcher_activity _get_adb_devices
