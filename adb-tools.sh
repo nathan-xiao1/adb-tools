@@ -9,22 +9,24 @@ usage() {
     exit 1
 }
 
-# Check if the number of arguments is non-zero
+# Use the interactive interface if no argument is specified,
+# otherwise use the CLI interface.
 if [ $# -eq 0 ]; then
-    usage
-fi
+    source modules/main.sh
+else
+    # Parse the first argument and call the corresponding function
+    case $1 in
+    install)
+        shift
+        (modules/install-apk.sh "$@")
+        ;;
+    screenshot)
+        shift
+        (modules/screenshot.sh "$@")
+        ;;
+    *)
+        usage
+        ;;
+    esac
 
-# Parse the first argument and call the corresponding function
-case $1 in
-install)
-    shift
-    (modules/install-apk.sh "$@")
-    ;;
-screenshot)
-    shift
-    (modules/screenshot.sh "$@")
-    ;;
-*)
-    usage
-    ;;
-esac
+fi
