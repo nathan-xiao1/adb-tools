@@ -16,6 +16,10 @@ if [ $# -eq 0 ]; then
 else
     # Parse the first argument and call the corresponding function
     case $1 in
+    devices)
+        shift
+        (modules/devices.sh "$@")
+        ;;
     install)
         shift
         (modules/install-apk.sh "$@")

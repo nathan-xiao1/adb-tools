@@ -21,6 +21,7 @@ echo -e ""
 
 # Modules definitions. Syntax: "{description} | {module path}"
 modules=(
+    "List connected ADB devices | devices.sh"
     "Install APK to device | install-apk.sh"
     "Take screenshot of device |screenshot.sh"
 )
