@@ -161,6 +161,19 @@ _launch_apk() {
     fi
 }
 
-# Wrapper for _install_apk which removes the job control message for
-# the parallel jobs.
-_install_apk "$@" | sed -E '/^\[[0-9]+\][[:space:]]+(-)?[[:space:]]*[0-9]+/d'
+adb_tools_module_main_cli() {
+    # Wrapper for _install_apk which removes the job control message for
+    # the parallel jobs.
+    _install_apk "$@" | sed -E '/^\[[0-9]+\][[:space:]]+(-)?[[:space:]]*[0-9]+/d'
+}
+
+adb_tools_module_main_tui() {
+    echo -ne "${FG_BOLD_WHITE}Device ID: ${RESET}"
+    read -r device_id
+    echo -ne "${FG_BOLD_WHITE}APK Path: ${RESET}"
+    read -r apk_path
+
+    echo -e ""
+
+    _install_apk "$device_id" --apk "$apk_path" | sed -E '/^\[[0-9]+\][[:space:]]+(-)?[[:space:]]*[0-9]+/d'
+}

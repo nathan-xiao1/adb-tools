@@ -1,36 +1,35 @@
 #!/bin/bash
 
-source modules/common/adb-utils.sh
-source modules/common/ansi-escape-codes.sh
-source modules/common/message-helpers.sh
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
-usage() {
-    echo "Usage: $0 {install|screenshot}"
-    exit 1
-}
+source "$script_dir/modules/common/adb-utils.sh"
+source "$script_dir/modules/common/ansi-escape-codes.sh"
+source "$script_dir/modules/common/message-helpers.sh"
 
-# Use the interactive interface if no argument is specified,
+# Use the interactive text user interface (TUI) if no argument is specified,
 # otherwise use the CLI interface.
-if [ $# -eq 0 ]; then
-    source modules/main.sh
+if [[ $# -eq 0 ]]; then
+    source "$script_dir/adb-tools-tui.sh"
 else
     # Parse the first argument and call the corresponding function
     case $1 in
     devices)
+        module_path="modules/devices.sh"
         shift
-        (modules/devices.sh "$@")
         ;;
     install)
+        module_path="modules/install-apk.sh"
         shift
-        (modules/install-apk.sh "$@")
         ;;
     screenshot)
+        module_path="modules/screenshot.sh"
         shift
-        (modules/screenshot.sh "$@")
         ;;
     *)
-        usage
+        echo -e "${FG_RED}Unknown command '$1'${RESET}"
+        exit 1
         ;;
     esac
 
+    (source "$script_dir/$module_path" && adb_tools_module_main_cli "$@")
 fi

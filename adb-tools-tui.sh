@@ -21,9 +21,9 @@ echo -e ""
 
 # Modules definitions. Syntax: "{description} | {module path}"
 modules=(
-    "List connected ADB devices | devices.sh"
-    "Install APK to device | install-apk.sh"
-    "Take screenshot of device |screenshot.sh"
+    "List connected ADB devices | modules/devices.sh"
+    "Install APK to device | modules/install-apk.sh"
+    "Take screenshot of device | modules/screenshot.sh"
 )
 
 # Print each module with a selection number
@@ -41,7 +41,8 @@ echo -e ""
 
 # Read user input to get a valid selection
 while true; do
-    read -rp "Action: " input
+    echo -ne "${FG_BOLD_WHITE}Enter selection: ${RESET}"
+    read -r input
     if [[ "$input" == "q" ]]; then
         exit 0
     elif [[ "$input" =~ ^[0-9]+$ && "$input" -gt 0 && "$input" -le ${#modules[@]} ]]; then
@@ -55,8 +56,14 @@ done
 # Get the module path of the selected module
 selected_module=${modules[$((input - 1))]}
 IFS='|' read -r -a parts <<<"$selected_module"
+description=$(echo "${parts[0]}" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
 module_path=$(echo "${parts[1]}" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+
+echo -e "Selected: ${FG_BOLD_CYAN}$description${RESET}"
 
 echo -e ""
 
-source "${BASH_SOURCE%/*}/$module_path"
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+source "$script_dir/$module_path"
+
+adb_tools_module_main_tui "$@"
