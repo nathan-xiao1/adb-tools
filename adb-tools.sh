@@ -25,6 +25,10 @@ else
         module_path="modules/screenshot.sh"
         shift
         ;;
+    scrcpy)
+        module_path="modules/scrcpy.sh"
+        shift
+        ;;
     *)
         echo -e "${FG_RED}Unknown command '$1'${RESET}"
         exit 1

@@ -3,7 +3,7 @@
 source modules/common/ansi-escape-codes.sh
 source modules/common/select-option.sh
 
-echo -e "${FG_MAGENTA}"
+echo -ne "${FG_MAGENTA}"
 echo -e '
                 $$\ $$\               $$\                         $$\           
                 $$ |$$ |              $$ |                        $$ |          
@@ -16,8 +16,7 @@ $$  __$$ |$$ |  $$ |$$ |  $$ |        $$ |$$\ $$ |  $$ |$$ |  $$ |$$ | \____$$\
 '
 echo -e "${RESET}"
 
-echo -e ""
-echo -e "Select an action:"
+echo -e "Select an action: ${FG_DIM}(Enter 'q' or Ctrl+C to quit)${RESET}"
 echo -e ""
 
 # Modules definitions. Syntax: "{description} | {module path}"
@@ -25,6 +24,7 @@ modules=(
     "List connected ADB devices | modules/devices.sh"
     "Install APK to device | modules/install-apk.sh"
     "Take screenshot of device | modules/screenshot.sh"
+    "Display and control device (scrcpy) | modules/scrcpy.sh"
 )
 
 # Print each module with a selection number
