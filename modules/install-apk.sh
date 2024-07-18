@@ -168,12 +168,27 @@ adb_tools_module_main_cli() {
 }
 
 adb_tools_module_main_tui() {
-    echo -ne "${FG_BOLD_WHITE}Device ID: ${RESET}"
-    read -r device_id
+    # Get list of devices to select from
+    local adb_devices=("All devices")
+    adb_devices+=($(_get_adb_devices))
+
+    # Get user selection
+    select_option "${adb_devices[@]}"
+    local selected_device_index=$?
+    local selected_device="${adb_devices[selected_device_index]}"
+
+    echo -e "${FG_BOLD_WHITE}Selected device${RESET}: ${selected_device}"
+
+    # Index 0 is "All devices"
+    if [[ $selected_device_index == 0 ]]; then
+        selected_device=""
+    fi
+
+    # Get the path to the APK file
     echo -ne "${FG_BOLD_WHITE}APK Path: ${RESET}"
-    read -r apk_path
+    read -er apk_path
 
     echo -e ""
 
-    _install_apk "$device_id" --apk "$apk_path" | sed -E '/^\[[0-9]+\][[:space:]]+(-)?[[:space:]]*[0-9]+/d'
+    _install_apk "$selected_device" --apk "$apk_path" | sed -E '/^\[[0-9]+\][[:space:]]+(-)?[[:space:]]*[0-9]+/d'
 }

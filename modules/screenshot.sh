@@ -86,10 +86,21 @@ adb_tools_module_main_cli() {
 }
 
 adb_tools_module_main_tui() {
-    echo -ne "${FG_BOLD_WHITE}Device ID: ${RESET}"
-    read -r device_id
+    # Get list of devices to select from
+    local adb_devices=("All devices")
+    adb_devices+=($(_get_adb_devices))
 
-    echo -e ""
+    # Get user selection
+    select_option "${adb_devices[@]}"
+    local selected_device_index=$?
+    local selected_device
 
-    _adb_screenshot "$device_id"
+    # Index 0 is "All devices"
+    if [[ $selected_device_index == 0 ]]; then
+        selected_device=""
+    else
+        selected_device="${adb_devices[selected_device_index]}"
+    fi
+
+    _adb_screenshot "$selected_device"
 }

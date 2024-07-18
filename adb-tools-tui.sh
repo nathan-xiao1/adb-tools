@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source modules/common/ansi-escape-codes.sh
+source modules/common/select-option.sh
 
 echo -e "${FG_MAGENTA}"
 echo -e '
@@ -59,7 +60,7 @@ IFS='|' read -r -a parts <<<"$selected_module"
 description=$(echo "${parts[0]}" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
 module_path=$(echo "${parts[1]}" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
 
-echo -e "Selected: ${FG_BOLD_CYAN}$description${RESET}"
+echo -e "Selected: ${FG_BOLD_BLUE}$description${RESET}"
 
 echo -e ""
 
