@@ -91,7 +91,7 @@ adb_tools_module_main_tui() {
     adb_devices+=($(_get_adb_devices))
 
     # Get user selection
-    select_option "${adb_devices[@]}"
+    select_option "Select a device to screenshot" "${adb_devices[@]}"
     local selected_device_index=$?
     local selected_device
 
@@ -102,5 +102,17 @@ adb_tools_module_main_tui() {
         selected_device="${adb_devices[selected_device_index]}"
     fi
 
-    _adb_screenshot "$selected_device"
+    # Get user selection
+    local open_screenshot_options=("Yes" "No")
+    select_option "Open the screenshot after it has been taken?" "${open_screenshot_options[@]}"
+    local open_screenshot_options_index=$?
+    local open_screenshot_option="${open_screenshot_options[open_screenshot_options_index]}"
+
+    if [[ "$open_screenshot_option" == "Yes" ]]; then
+        open_screenshot_option=""
+    else
+        open_screenshot_option="--no-open"
+    fi
+
+    _adb_screenshot "$selected_device" "$open_screenshot_option"
 }

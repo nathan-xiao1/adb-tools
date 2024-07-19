@@ -52,7 +52,8 @@ _clear_screen() {
 # Function to display a text user interface for selecting an option
 # Parameters: an array of options
 select_option() {
-    local options=("$@")
+    local prompt="$1"
+    local options=("${@:2}")
     local selected=0
 
     _get_term_size
@@ -61,7 +62,10 @@ select_option() {
     # Function to print the menu
     print_menu() {
         _clear_screen
-        echo -e "Use the ${FG_BOLD_WHITE}UP${RESET} and ${FG_BOLD_WHITE}DOWN${RESET} arrow keys to navigate and ${FG_BOLD_WHITE}Enter${RESET} to select an option:"
+        echo -e "${FG_DIM}[Use the UP and DOWN arrow key to make a selection and Enter to select]${RESET}"
+        echo -e ""
+        echo -e "$prompt:"
+        echo -e ""
         for i in "${!options[@]}"; do
             if [[ $i -eq $selected ]]; then
                 echo -e " ${FG_BLUE}>${RESET} ${options[$i]}"

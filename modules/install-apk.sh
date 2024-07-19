@@ -173,7 +173,7 @@ adb_tools_module_main_tui() {
     adb_devices+=($(_get_adb_devices))
 
     # Get user selection
-    select_option "${adb_devices[@]}"
+    select_option "Select a device to install APK on" "${adb_devices[@]}"
     local selected_device_index=$?
     local selected_device="${adb_devices[selected_device_index]}"
 
