@@ -29,6 +29,10 @@ else
         module_path="modules/scrcpy.sh"
         shift
         ;;
+    wireless-connect)
+        module_path="modules/wireless-connect.sh"
+        shift
+        ;;
     *)
         echo -e "${FG_RED}Unknown command '$1'${RESET}"
         exit 1

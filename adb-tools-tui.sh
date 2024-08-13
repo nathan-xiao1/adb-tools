@@ -25,6 +25,7 @@ modules=(
     "Install APK to device | modules/install-apk.sh"
     "Take screenshot of device | modules/screenshot.sh"
     "Display and control device (scrcpy) | modules/scrcpy.sh"
+    "Connect wirelessly with a device after an initial USB connection | modules/wireless-connect.sh"
 )
 
 # Print each module with a selection number
