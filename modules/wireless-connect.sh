@@ -5,7 +5,7 @@ _wireless_connect() {
     local devices=()
 
     # Get the list of connected devices
-    local adb_devices=($(_get_adb_devices))
+    local adb_devices=($(_get_adb_devices --no-wireless))
     if [[ -z "${adb_devices[*]}" ]]; then
         error_msg "No devices found."
         return 1
@@ -73,7 +73,7 @@ adb_tools_module_main_cli() {
 adb_tools_module_main_tui() {
     # Get list of devices to select from
     local adb_devices=("All devices")
-    adb_devices+=($(_get_adb_devices))
+    adb_devices+=($(_get_adb_devices --no-wireless))
 
     # Get user selection
     select_option "Select a device to display and control" "${adb_devices[@]}"

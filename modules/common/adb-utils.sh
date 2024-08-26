@@ -80,8 +80,20 @@ _get_launcher_activity() {
 }
 
 _get_adb_devices() {
-    local devices
-    while IFS='' read -r line; do devices+=("$line"); done < <(adb devices | grep -v "List of devices" | cut -f1)
+    local devices=()
+    local no_wireless=false
+
+    if [ "$1" == "--no-wireless" ]; then
+        no_wireless=true
+    fi
+
+    while IFS='' read -r line; do
+        if $no_wireless && [[ "$line" == *":"* ]]; then
+            continue
+        fi
+        devices+=("$line")
+    done < <(adb devices | grep -v "List of devices" | cut -f1)
+
     echo "${devices[@]}"
 }
 
