@@ -1,5 +1,5 @@
 #!/bin/bash
-script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+script_dir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 
 source "$script_dir/modules/common/ansi-escape-codes.sh"
 
@@ -8,7 +8,7 @@ if [[ -f ~/.zshrc ]]; then
     if ! grep -q "alias adb-tools=" ~/.zshrc; then
         echo "" >>~/.zshrc
         echo "source $script_dir/_adb_tools_completion.sh" >>~/.zshrc
-        echo "alias adb-tools='(cd $script_dir && ./adb-tools.sh)'" >>~/.zshrc
+        echo "export PATH=\${PATH}:\"$script_dir\"" >>~/.zshrc
         echo -e "${FG_GREEN}Installed adb-tools for zsh${RESET}"
     else
         echo -e "${FG_YELLOW}adb-tools already installed for zsh${RESET}"
@@ -20,7 +20,7 @@ if [[ -f ~/.bashrc ]]; then
     if ! grep -q "alias adb-tools=" ~/.bashrc; then
         echo "" >>~/.bashrc
         echo "source $script_dir/_adb_tools_completion.sh" >>~/.bashrc
-        echo "alias adb-tools='(cd $PWD && ./adb-tools.sh)'" >>~/.bashrc
+        echo "export PATH=\${PATH}:\"$script_dir\"" >>~/.bashrc
         echo -e "${FG_GREEN}Installed adb-tools for bash${RESET}"
     else
         echo -e "${FG_YELLOW}adb-tools already installed for bash${RESET}"

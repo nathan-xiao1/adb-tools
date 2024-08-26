@@ -1,6 +1,6 @@
 #!/bin/bash
 
-script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+script_dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
 
 source "$script_dir/modules/common/adb-utils.sh"
 source "$script_dir/modules/common/ansi-escape-codes.sh"

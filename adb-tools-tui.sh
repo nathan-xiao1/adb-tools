@@ -65,7 +65,7 @@ echo -e "Selected: ${FG_BOLD_BLUE}$description${RESET}"
 
 echo -e ""
 
-script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+script_dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
 source "$script_dir/$module_path"
 
 adb_tools_module_main_tui "$@"
