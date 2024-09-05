@@ -7,7 +7,7 @@ source "$script_dir/modules/common/ansi-escape-codes.sh"
 if [[ -f ~/.zshrc ]]; then
     if ! grep -q "alias adb-tools=" ~/.zshrc; then
         echo "" >>~/.zshrc
-        echo "source $script_dir/_adb_tools_completion.sh" >>~/.zshrc
+        echo "source $script_dir/_adb_tools_completion_zsh.sh" >>~/.zshrc
         echo "export PATH=\${PATH}:\"$script_dir\"" >>~/.zshrc
         echo -e "${FG_GREEN}Installed adb-tools for zsh${RESET}"
     else
