@@ -4,7 +4,7 @@
 _install_apk() {
 
     # Default values
-    local apk_path="app/test.apk"
+    local apk_path="${ADB_TOOLS_DEFAULT_APK:-}"
     local devices=()
 
     # Parse command line arguments
@@ -29,6 +29,11 @@ _install_apk() {
     local adb_devices=($(_get_adb_devices))
     if [[ -z "${adb_devices[*]}" ]]; then
         error_msg "No devices found."
+        return 1
+    fi
+
+    if [[ -z "$apk_path" ]]; then
+        error_msg "No APK file specified. Use '--apk <apk_file>' to specify an APK or the ADB_TOOLS_DEFAULT_APK env variable to set a default APK"
         return 1
     fi
 
