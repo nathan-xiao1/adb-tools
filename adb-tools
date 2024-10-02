@@ -6,7 +6,7 @@ source "$script_dir/modules/common/adb-utils.sh"
 source "$script_dir/modules/common/ansi-escape-codes.sh"
 source "$script_dir/modules/common/message-helpers.sh"
 
-source "$script_dir/update.sh"
+source "$script_dir/update.sh" "$script_dir"
 
 # Use the interactive text user interface (TUI) if no argument is specified,
 # otherwise use the CLI interface.
