@@ -19,6 +19,10 @@ else
         module_path="modules/devices.sh"
         shift
         ;;
+    device-info)
+        module_path="modules/device-info.sh"
+        shift
+        ;;
     install)
         module_path="modules/install-apk.sh"
         shift

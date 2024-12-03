@@ -36,6 +36,7 @@ _adb_tools_completion() {
     # Main options
     local -a main_opts=(
         'devices:List connected devices'
+        'device-info:Show information about a device'
         'install:Install an APK file to a device'
         'screenshot:Take a screenshot on a device'
         'scrcpy:Show the device screen on your computer'
@@ -61,6 +62,11 @@ _adb_tools_completion() {
         local available_devices=($(_adb_devices_completion_list_unique))
 
         case "$words[2]" in
+        device-info)
+            _arguments \
+                '*:Connected ADB devices:compadd -a available_devices' &&
+                ret=0
+            ;;
         install)
             _arguments \
                 '*:Connected ADB devices:compadd -a available_devices' \
