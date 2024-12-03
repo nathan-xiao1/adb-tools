@@ -41,7 +41,7 @@ fi
 current_timestamp=$(date +%s)
 
 # # Don't check for update if we have already check within the last `CHECK_FREQUENCY_S` seconds
-if [[ $((current_timestamp - last_check_timestamp)) -le CHECK_FREQUENCY_S ]]; then
+if [[ $((current_timestamp - last_check_timestamp)) -ge CHECK_FREQUENCY_S ]]; then
     return 0
 fi
 
