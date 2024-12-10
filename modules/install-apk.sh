@@ -5,6 +5,7 @@ _install_apk() {
 
     # Default values
     local apk_path="${ADB_TOOLS_DEFAULT_APK:-}"
+    local postinstall_adb_cmd=""
     local devices=()
 
     # Parse command line arguments
@@ -12,6 +13,10 @@ _install_apk() {
         case $1 in
         -a | --apk)
             apk_path="$2"
+            shift 2
+            ;;
+        -p | --postinstall)
+            postinstall_adb_cmd="$2"
             shift 2
             ;;
         -*)
@@ -84,6 +89,15 @@ _install_apk() {
                 else
                     device_printf "$device" "${FG_RED}Failed to launch package on $device${RESET}"
                     return 2
+                fi
+
+                # Run post install ADB command
+                if [[ -n "$postinstall_adb_cmd" ]]; then
+                    if _run_postinstall_adb_command "$device" "$postinstall_adb_cmd"; then
+                        device_printf "$device" "${FG_GREEN}Successfully ran post install ADB command on $device${RESET}"
+                    else
+                        device_printf "$device" "${FG_RED}Failed to run post install ADB command on $device${RESET}"
+                    fi
                 fi
             else
                 device_printf "$device" "${FG_RED}Failed to install on ${device}${RESET}"
@@ -161,6 +175,18 @@ _launch_apk() {
     fi
 
     # Check the exit code of the adb install command
+    if [[ $? -ne 0 ]]; then
+        return 1
+    fi
+}
+
+_run_postinstall_adb_command() {
+    local device=$1
+    local postinstall=$2
+
+    adb -s "$device" "$postinstall" >/dev/null
+
+    # Check the exit code of the adb command
     if [[ $? -ne 0 ]]; then
         return 1
     fi

@@ -71,7 +71,9 @@ _adb_tools_completion() {
             _arguments \
                 '*:Connected ADB devices:compadd -a available_devices' \
                 '-a[APK path]:APK file:_files' \
-                '--apk[APK path]:APK file:_files' &&
+                '--apk[APK path]:APK file:_files' \
+                '-p[Post install ADB command]' \
+                '--postinstall[Post install ADB command]' &&
                 ret=0
             ;;
         screenshot)
