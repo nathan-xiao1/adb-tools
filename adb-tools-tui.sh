@@ -1,7 +1,9 @@
 #!/bin/bash
 
-source modules/common/ansi-escape-codes.sh
-source modules/common/select-option.sh
+script_dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
+
+source "$script_dir/modules/common/ansi-escape-codes.sh"
+source "$script_dir/modules/common/select-option.sh"
 
 echo -ne "${FG_MAGENTA}"
 echo -e '
