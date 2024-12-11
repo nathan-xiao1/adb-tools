@@ -19,7 +19,7 @@ _find_sdk_path() {
 _aapt_dump() {
     apkPath=$1
     key=$2
-    aapt_command=$(aapt_command)
+    aapt_command=$(_aapt_command)
     result=$(${aapt_command} d badging "$apkPath" | grep "$key" | awk '{gsub("name=|'"'"'", ""); print $2}')
     echo "$result"
 }
@@ -27,13 +27,13 @@ _aapt_dump() {
 _aapt_command() {
     aapt_command=$(which aapt)
     if [ $? != 0 ]; then
-        aapt_command=$(set_aapt_path)
+        aapt_command=$(_set_aapt_path)
     fi
     echo "$aapt_command"
 }
 
 _set_aapt_path() {
-    sdkDir=$(find_sdk_path)
+    sdkDir=$(_find_sdk_path)
     buildToolsPath="$sdkDir/build-tools"
     for file in $(ls -r $buildToolsPath); do
         aaptFile="$buildToolsPath/$file/aapt"
@@ -46,7 +46,7 @@ _set_aapt_path() {
 
 _get_launcher_activity() {
     local apkPath=$1
-    aapt_command=$(aapt_command)
+    aapt_command=$(_aapt_command)
     manifestData=$(${aapt_command} dump xmltree "$apkPath" AndroidManifest.xml)
     indicatorLines=$(echo "$manifestData" | grep -n 'android:name(.*)="android.intent.category.LAUNCHER"' | awk -F ":" '{print $1}')
     launcherActivity=""
@@ -74,7 +74,7 @@ _get_launcher_activity() {
     done
 
     if [ ! -n "$launcherActivity" ]; then
-        launcherActivity=$(aapt_dump "$apkPath" 'launchable-activity')
+        launcherActivity=$(_aapt_dump "$apkPath" 'launchable-activity')
     fi
     echo "$launcherActivity"
 }
